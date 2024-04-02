@@ -314,6 +314,8 @@ pub struct Middlewares {
     /// Middleware that improve the tracing logger and adding trace id for each
     /// request.
     pub logger: Option<EnableMiddleware>,
+    /// Middleware that adds opentelemetry support
+    pub opentelemetry: Option<EnableMiddleware>,
     /// catch any code panic and log the error.
     pub catch_panic: Option<EnableMiddleware>,
     /// Setting a global timeout for the requests

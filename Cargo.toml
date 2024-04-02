@@ -81,6 +81,11 @@ include_dir = "0.7.3"
 thiserror = "1"
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.16", features = ["env-filter"] }
+tracing-opentelemetry-instrumentation-sdk = "0.18"
+opentelemetry = "0.22"
+opentelemetry-otlp = { version = "0.15"}
+init-tracing-opentelemetry = { version = "0.18", features = ["otlp", "tracing_subscriber_ext"] }
+axum-tracing-opentelemetry = "0.18"
 
 
 # cli/migrations

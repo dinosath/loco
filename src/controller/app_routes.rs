@@ -17,6 +17,7 @@ use tower_http::{
     timeout::TimeoutLayer,
     trace::TraceLayer,
 };
+use axum_tracing_opentelemetry::middleware::{OtelAxumLayer, OtelInResponseLayer};
 
 #[cfg(feature = "channels")]
 use super::channels::AppChannels;
@@ -246,6 +247,12 @@ impl AppRoutes {
             }
         }
 
+        if let Some(opentelemetry) = &ctx.config.server.middlewares.opentelemetry {
+            if opentelemetry.enable {
+                app = Self::add_opentelemetry_middleware(app);
+            }
+        }
+
         #[cfg(feature = "channels")]
         if let Some(channels) = self.channels.as_ref() {
             tracing::info!("[Middleware] Adding channels");
@@ -309,6 +316,13 @@ impl AppRoutes {
         app
     }
 
+    fn add_opentelemetry_middleware(app: AXRouter<AppContext>) -> AXRouter<AppContext> {
+        let app = app
+            .layer(OtelInResponseLayer::default())
+            .layer(OtelAxumLayer::default());
+        tracing::info!("[Middleware] Adding opentelemetry layer");
+        app
+    }
     fn get_cors_middleware(config: &config::CorsMiddleware) -> Result<cors::CorsLayer> {
         let mut cors: cors::CorsLayer = cors::CorsLayer::permissive();
 
