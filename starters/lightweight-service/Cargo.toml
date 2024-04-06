@@ -19,6 +19,10 @@ async-trait = "0.1.74"
 axum = "0.7.1"
 tracing = "0.1.40"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter", "json"] }
+tracing-opentelemetry-instrumentation-sdk = "0.18"
+opentelemetry = "0.22"
+opentelemetry-otlp = { version = "0.15", optional = true }
+init-tracing-opentelemetry = { version = "0.18", features = ["otlp", "tracing_subscriber_ext"] }
 
 [[bin]]
 name = "loco_starter_template-cli"
