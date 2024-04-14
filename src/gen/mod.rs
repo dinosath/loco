@@ -32,6 +32,7 @@ const DEPLOYMENT_DOCKER_IGNORE_T: &str = include_str!("templates/deployment_dock
 const DEPLOYMENT_SHUTTLE_T: &str = include_str!("templates/deployment_shuttle.t");
 const DEPLOYMENT_SHUTTLE_CONFIG_T: &str = include_str!("templates/deployment_shuttle_config.t");
 const DEPLOYMENT_NGINX_T: &str = include_str!("templates/deployment_nginx.t");
+const DEPLOYMENT_KUBERNETES_T: &str = include_str!("templates/deployment_kubernetes.t");
 
 const DEPLOYMENT_SHUTTLE_RUNTIME_VERSION: &str = "0.38.0";
 
@@ -39,6 +40,7 @@ const DEPLOYMENT_OPTIONS: &[(&str, DeploymentKind)] = &[
     ("Docker", DeploymentKind::Docker),
     ("Shuttle", DeploymentKind::Shuttle),
     ("Nginx", DeploymentKind::Nginx),
+    ("Kubernetes", DeploymentKind::Kubernetes),
 ];
 
 #[derive(clap::ValueEnum, Clone, Debug)]
@@ -53,6 +55,7 @@ pub enum DeploymentKind {
     Docker,
     Shuttle,
     Nginx,
+    Kubernetes
 }
 impl FromStr for DeploymentKind {
     type Err = ();
@@ -218,6 +221,12 @@ pub fn generate<H: Hooks>(component: Component, config: &Config) -> Result<()> {
                         "port": &config.server.port
                     });
                     rrgen.generate(DEPLOYMENT_NGINX_T, &vars)?;
+                }
+                DeploymentKind::Kubernetes => {
+                    let vars = json!({
+                        "pkg_name": H::app_name(),
+                    });
+                    rrgen.generate(DEPLOYMENT_KUBERNETES_T, &vars)?;
                 }
             }
         }
