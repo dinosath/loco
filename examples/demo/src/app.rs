@@ -50,6 +50,7 @@ impl Hooks for App {
             Box::new(initializers::view_engine::ViewEngineInitializer),
             Box::new(initializers::hello_view_engine::HelloViewEngineInitializer),
             Box::new(loco_extras::initializers::normalize_path::NormalizePathInitializer),
+            Box::new(loco_extras::initializers::oauth2::initializer::OAuth2Initializer),
         ];
 
         if ctx.environment != Environment::Test {
