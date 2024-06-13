@@ -11,4 +11,5 @@
 //! * `initializer-multi-db` Adding extra DB's connection
 //! * `initializer-normalize-path` Normalize the request path
 //! * `initializer-opentelemetry` For adding opentelemetry tracing
+//! * `initializer-axum-login` For adding support for axum login
 pub mod initializers;
