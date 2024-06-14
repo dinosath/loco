@@ -26,6 +26,7 @@ default = ["auth_jwt", "cli", "with-db", "cache_inmem"]
 auth_jwt = ["dep:jsonwebtoken"]
 cli = ["dep:clap"]
 testing = ["dep:axum-test"]
+testcontainers = ["dep:testcontainers-modules"]
 with-db = ["dep:sea-orm", "dep:sea-orm-migration"]
 channels = ["dep:socketioxide"]
 # Storage features
@@ -123,6 +124,7 @@ object_store = { version = "0.9.0", default-features = false }
 
 # cache
 moka = { version = "0.12.7", features = ["sync"], optional = true }
+testcontainers-modules = { version = "0.5.0", features = ["postgres"], optional = true }
 
 [workspace.dependencies]
 async-trait = { version = "0.1.74" }

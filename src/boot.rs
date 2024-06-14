@@ -189,6 +189,10 @@ pub async fn create_context<H: Hooks>(environment: &Environment) -> Result<AppCo
              for production. disable with `logger.pretty_backtrace` in your config yaml)"
         );
     }
+
+    #[cfg(feature = "testcontainers")]
+    testcontainers_setup(&config);
+
     #[cfg(feature = "with-db")]
     let db = db::connect(&config.database).await?;
 
@@ -210,6 +214,20 @@ pub async fn create_context<H: Hooks>(environment: &Environment) -> Result<AppCo
     };
 
     H::after_context(ctx).await
+}
+#[cfg(feature = "testcontainers")]
+use testcontainers_modules::{postgres, testcontainers::runners::AsyncRunner};
+
+#[cfg(feature = "testcontainers")]
+fn testcontainers_setup(config: &Config) {
+    let container = postgres::Postgres::default().start().unwrap();
+    let host_ip = container.get_host().unwrap();
+    let host_port = container.get_host_port_ipv4(5432).unwrap();
+
+    let postgres_uri = format!("postgres://postgres:postgres@{host_ip}:{host_port}");
+
+    info!("Started postgres container on uri:{endpoint_url}");
+    &config.database.uri=postgres_uri;
 }
 
 #[cfg(feature = "with-db")]
