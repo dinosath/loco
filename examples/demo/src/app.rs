@@ -2,6 +2,8 @@ use std::path::Path;
 
 use async_trait::async_trait;
 use loco_extras;
+use loco_extras::initializers::axum_login::initializer::AxumLoginInitializer;
+
 use loco_rs::{
     app::{AppContext, Hooks, Initializer},
     boot::{create_app, BootResult, StartMode},
@@ -46,10 +48,10 @@ impl Hooks for App {
     // <snip id="app-initializers">
     async fn initializers(ctx: &AppContext) -> Result<Vec<Box<dyn Initializer>>> {
         let mut initializers: Vec<Box<dyn Initializer>> = vec![
-            Box::new(initializers::axum_session::AxumSessionInitializer),
             Box::new(initializers::view_engine::ViewEngineInitializer),
             Box::new(initializers::hello_view_engine::HelloViewEngineInitializer),
             Box::new(loco_extras::initializers::normalize_path::NormalizePathInitializer),
+            Box::new(AxumLoginInitializer),
         ];
 
         if ctx.environment != Environment::Test {
