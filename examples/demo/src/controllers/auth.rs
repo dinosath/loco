@@ -9,6 +9,18 @@ use crate::{
     },
     views::auth::UserSession,
 };
+
+use serde_json::json;
+use axum::{
+    extract::{Request, Json, Path, Extension, Query},
+    routing::post,
+    http::header::HeaderMap,
+    body::{Bytes, Body},
+    Router,
+};
+use std::collections::HashMap;
+use serde_json::Value;
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct VerifyParams {
     pub token: String,
@@ -117,31 +129,37 @@ async fn reset(State(ctx): State<AppContext>, Json(params): Json<ResetParams>) -
     format::empty_json()
 }
 
-/// Creates a user login and returns a token
-async fn login(State(ctx): State<AppContext>, Json(params): Json<LoginParams>) -> Result<Response> {
-    let user = users::Model::find_by_email(&ctx.db, &params.email).await?;
-
-    let valid = user.verify_password(&params.password);
-
-    if !valid {
-        return unauthorized("unauthorized!");
+pub async fn logout(mut auth_session: AuthSession) -> impl IntoResponse {
+    match auth_session.logout().await {
+        Ok(_) => Redirect::to("/login").into_response(),
+        Err(_) => StatusCode::INTERNAL_SERVER_ERROR.into_response(),
     }
-
-    let jwt_secret = ctx.config.get_jwt_config()?;
-
-    let token = user
-        .generate_jwt(&jwt_secret.secret, &jwt_secret.expiration)
-        .or_else(|_| unauthorized("unauthorized!"))?;
-
-    format::json(UserSession::new(&user, &token))
 }
+
+pub async fn login(
+    auth_session: AuthSession,
+    session: Session,
+    Form(NextUrl { next }): Form<NextUrl>,
+) -> impl IntoResponse {
+    let (auth_url, csrf_state) = auth_session.backend.authorize_url();
+
+    session
+        .insert(CSRF_STATE_KEY, csrf_state.secret())
+        .await
+        .expect("Serialization should not fail.");
+
+    session
+        .insert(NEXT_URL_KEY, next)
+        .await
+        .expect("Serialization should not fail.");
+
+    Redirect::to(auth_url.as_str()).into_response()
+}
+
 
 pub fn routes() -> Routes {
     Routes::new()
         .prefix("auth")
-        .add("/register", post(register))
-        .add("/verify", post(verify))
-        .add("/login", post(login))
-        .add("/forgot", post(forgot))
-        .add("/reset", post(reset))
+        .route("/login", post(login))
+        .route("/logout", get(logout))
 }

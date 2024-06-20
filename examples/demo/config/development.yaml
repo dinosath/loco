@@ -74,13 +74,14 @@ server:
     compression:
       # Enable/Disable the middleware.
       enable: true
-    static_assets:
+    static:
       enable: true
       must_exist: true
-      precompressed: true
+      precompressed: false
       folder:
-        path: assets
-      fallback: index.html
+        uri: "/"
+        path: "frontend/dist"
+      fallback: "frontend/dist/index.html"
     cors:
       enable: true
       # Set the value of the [`Access-Control-Allow-Origin`][mdn] header

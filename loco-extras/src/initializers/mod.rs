@@ -73,3 +73,5 @@ pub mod opentelemetry;
 pub mod prometheus;
 #[cfg(feature = "initializer-axum-login")]
 pub mod axum_login;
+#[cfg(feature = "initializer-oauth2")]
+pub mod oauth2;

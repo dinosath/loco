@@ -3,6 +3,7 @@ use std::path::Path;
 use async_trait::async_trait;
 use loco_extras;
 use loco_extras::initializers::axum_login::initializer::AxumLoginInitializer;
+use loco_extras::initializers::oauth2::OAuth2StoreInitializer;
 
 use loco_rs::{
     app::{AppContext, Hooks, Initializer},
@@ -52,6 +53,7 @@ impl Hooks for App {
             Box::new(initializers::hello_view_engine::HelloViewEngineInitializer),
             Box::new(loco_extras::initializers::normalize_path::NormalizePathInitializer),
             Box::new(AxumLoginInitializer),
+            Box::new(OAuth2StoreInitializer),
         ];
 
         if ctx.environment != Environment::Test {
@@ -78,6 +80,7 @@ impl Hooks for App {
             .add_route(controllers::upload::routes())
             .add_route(controllers::responses::routes())
             .add_route(controllers::cache::routes())
+            .add_route(controllers::oauth::routes())
     }
 
     async fn boot(mode: StartMode, environment: &Environment) -> Result<BootResult> {

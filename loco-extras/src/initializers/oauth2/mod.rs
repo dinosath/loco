@@ -25,10 +25,10 @@ use std::sync::{Arc, Mutex};
 use loco_oauth2::config::OAuth2Config;
 use loco_oauth2::OAuth2ClientStore;
 
-pub struct AxumLoginInitializer;
+pub struct OAuth2StoreInitializer;
 
 #[async_trait]
-impl Initializer for AxumLoginInitializer {
+impl Initializer for OAuth2StoreInitializer {
     fn name(&self) -> String {
         "axum-login".to_string()
     }

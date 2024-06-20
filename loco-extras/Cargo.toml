@@ -47,6 +47,8 @@ subtle = "2.5.0"
 matchers = "0.1.0"
 serde_urlencoded = "0.7.1"
 tokio = "1.37.0"
+loco-oauth2 = { version = "0.1.1", optional =  true }
+
 [dependencies.loco-rs]
 path = "../"
 version = "0.5.0"
@@ -62,7 +64,8 @@ full = [
   "initializer-normalize-path",
   "initializer-opentelemetry",
   "initializer-mongodb",
-  "initializer-axum-login"
+  "initializer-axum-login",
+  "initializer-oauth2"
 ]
 
 initializer-prometheus = ["dep:axum-prometheus"]
@@ -79,4 +82,5 @@ initializer-opentelemetry = [
   "dep:tracing",
 ]
 initializer-mongodb = ["dep:mongodb", "dep:serde", "dep:serde_json"]
-initializer-axum-login = ["dep:axum-login","dep:oauth2","dep:sea-orm","dep:sea-orm-migration","dep:sqlx","dep:reqwest","dep:thiserror"]
+initializer-axum-login = ["dep:axum-login","dep:oauth2","dep:sea-orm","dep:sea-orm-migration","dep:sqlx","dep:reqwest","dep:thiserror","dep:loco-oauth2"]
+initializer-oauth2 = ["dep:loco-oauth2"]

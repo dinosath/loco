@@ -8,3 +8,4 @@ pub mod notes;
 pub mod responses;
 pub mod upload;
 pub mod user;
+pub mod oauth;
