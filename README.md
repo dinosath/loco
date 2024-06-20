@@ -20,6 +20,8 @@
 
  #### Loco is strongly inspired by Rails. If you know Rails and Rust, you'll feel at home. If you only know Rails and new to Rust, you'll find Loco refreshing. We do not assume you know Rails.
 
+To get started quickly and see Loco in action, check out our [casts video](https://loco.rs/casts/). It's a great way to familiarize yourself with the framework and see some of its key features in use.
+
  ## Quick Start
 <!-- <snip id="quick-installation-command" inject_from="yaml" template="sh"> -->
 ```sh
@@ -78,7 +80,7 @@ $ cargo loco start
       ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
                 https://loco.rs
 
-listening on port 3000
+listening on port 5150
 ```
 <!-- </snip> -->
 
