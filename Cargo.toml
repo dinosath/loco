@@ -26,7 +26,10 @@ default = ["auth_jwt", "cli", "with-db", "cache_inmem", "bg_redis", "bg_pg"]
 auth_jwt = ["dep:jsonwebtoken"]
 cli = ["dep:clap"]
 testing = ["dep:axum-test"]
-with-db = ["dep:sea-orm", "dep:sea-orm-migration"]
+with-db = ["with-db-postgres", "with-db-sqlite"]
+with-db-postgres = ["sea-orm/sqlx-postgres", "sea-orm/runtime-tokio-rustls", "sea-orm/macros", "sea-orm-migration/sqlx-postgres", "sea-orm-migration/runtime-tokio-rustls"]
+with-db-sqlite = ["sea-orm/sqlx-sqlite", "sea-orm/runtime-tokio-rustls", "sea-orm/macros","sea-orm-migration/sqlx-sqlite", "sea-orm-migration/runtime-tokio-rustls",]
+
 channels = ["dep:socketioxide"]
 # Storage features
 all_storage = ["storage_aws_s3", "storage_azure", "storage_gcp"]
@@ -46,12 +49,8 @@ clap = { version = "4.4.7", features = ["derive"], optional = true }
 colored = "2"
 
 
-sea-orm = { version = "1.0.0", features = [
-    "sqlx-postgres",        # `DATABASE_DRIVER` feature
-    "sqlx-sqlite",
-    "runtime-tokio-rustls",
-    "macros",
-], optional = true }
+sea-orm = { version = "1.0.0", default-features = false, optional = true }
+sea-orm-migration = { version = "1.0.0", default-features = false, optional = true }
 
 tokio = { version = "1.33.0", default-features = false }
 # the rest
@@ -151,18 +150,6 @@ tower-http = { version = "0.6.1", features = [
     "set-header",
     "compression-full",
 ] }
-
-[dependencies.sea-orm-migration]
-optional = true
-version = "1.0.0"
-features = [
-    # Enable at least one `ASYNC_RUNTIME` and `DATABASE_DRIVER` feature if you want to run migration via CLI.
-    # View the list of supported features at https://www.sea-ql.org/SeaORM/docs/install-and-config/database-and-async-runtime.
-    # e.g.
-    "runtime-tokio-rustls", # `ASYNC_RUNTIME` feature
-    "sqlx-postgres",        # `DATABASE_DRIVER` feature
-    "sqlx-sqlite",
-]
 
 [package.metadata.docs.rs]
 features = ["testing"]
